@@ -1,0 +1,11 @@
+.ant-btn {
+  color: "white";
+  border: 0;
+  width: 75px;
+  border-radius: 12px;
+  color: white;
+}
+.ant-btn:hover,
+.ant-btn:focus {
+  color: white;
+}
