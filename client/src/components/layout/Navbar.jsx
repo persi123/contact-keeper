@@ -50,7 +50,7 @@ const Navbar = ({ title, icon }) => {
     </Fragment>
   );
   return (
-    <div >
+    <div className="navbar bg-primary">
       <h1>
         <i className={icon}></i> {title}
       </h1>
@@ -61,11 +61,11 @@ const Navbar = ({ title, icon }) => {
 
 Navbar.propTypes = {
   title: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired
+  icon: PropTypes.string.isRequired,
 };
 Navbar.defaultProps = {
   title: "Contact Keeper",
-  icon: "fas fa-id-cart-alt"
+  icon: "fas fa-id-cart-alt",
 };
 
 export default Navbar;
