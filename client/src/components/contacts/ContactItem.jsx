@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import contactContext from "../../context/contact/contactContext";
 import { Card, Button, Badge } from "antd";
-import style from "../../style/styles.css";
 
 const ContactItem = ({ contact }) => {
   const { deleteContact, setCurrent, clearCurrent } = useContext(

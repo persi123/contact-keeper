@@ -1,17 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import contactContext from "../../context/contact/contactContext";
-import { Form, Input, Button, Checkbox, Radio } from "antd";
-import styled from "styled-components";
+import { Form, Input, Button, Radio } from "antd";
 
-// const Button = styled.button`
-// borderRadius: 12px,
-// backgroundColor: #74cf4e,
-// color: white,
-// border: 0,
-// width: "75px,
-// `;
-
-const ContactForm = (props) => {
+const ContactForm = () => {
   const ContactContext = useContext(contactContext);
   const { addContact, current, clearCurrent, updateContact } = ContactContext;
   const [form] = Form.useForm();

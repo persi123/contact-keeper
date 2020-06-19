@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import alertContext from "../../context/alert/alertContext";
 import authContext from "../../context/auth/authContext";
+import { Form, Input, Button } from "antd";
 
-const Login = props => {
+const Login = (props) => {
   const AlertContext = useContext(alertContext);
   const AuthContext = useContext(authContext);
 
@@ -19,69 +20,79 @@ const Login = props => {
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
 
-  const [user, setUser] = useState({
-    email: "",
-    password: ""
-  });
-
-  const { email, password } = user;
-
-  const handleChange = ({ target: { name, value } }) => {
-    setUser({
-      ...user,
-      [name]: value
-    });
+  const onFinish = (values) => {
+    console.log(values);
+    loginUser(values);
   };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (email === "" || password === "") {
-      setAlert("Please Enter all fields", "danger");
-    } else {
-      loginUser({
-        email,
-        password
-      });
-    }
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
   };
   return (
     <div className="form-container">
       <h1>
         Account <span className="text-primary">Login</span>
       </h1>
+      <Form
+        {...layout}
+        name="basic"
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          label="email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={handleChange}
-            placeholder="Email"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
-        </div>
-
-        <input
-          type="submit"
-          value="Login"
-          className="btn btn-primary btn-block"
-        />
-      </form>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button
+            // type="primary"
+            htmlType="submit"
+            //  value={current ? "Update Contact" : "Add Contact"}
+            style={{
+              borderRadius: "12px",
+              backgroundColor: "#74cf4e",
+              color: "white",
+              border: 0,
+              width: "75px",
+            }}
+          >
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

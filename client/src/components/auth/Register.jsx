@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import alertContext from "../../context/alert/alertContext";
 import authContext from "../../context/auth/authContext";
+import { Form, Input, Button } from "antd";
 
-const Register = props => {
+const Register = (props) => {
   const AlertContext = useContext(alertContext);
   const AuthContext = useContext(authContext);
 
@@ -20,101 +21,145 @@ const Register = props => {
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
 
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confPassword: ""
-  });
-
-  const { name, email, password, confPassword } = user;
-
-  const handleChange = ({ target: { name, value } }) => {
-    setUser({
-      ...user,
-      [name]: value
-    });
+  const formItemLayout = {
+    labelCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 8,
+      },
+    },
+    wrapperCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 16,
+      },
+    },
+  };
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0,
+      },
+      sm: {
+        span: 16,
+        offset: 8,
+      },
+    },
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const onFinish = (values) => {
+    console.log("Received values of form: ", values);
 
-    if (name === "" || email === "" || password === "") {
-      setAlert("Please Enter all fields", "danger");
-    } else if (password !== confPassword) {
-      setAlert("Password do not match", "danger");
-    } else {
-      registerUser({
-        name,
-        email,
-        password
-      });
-    }
+    registerUser(values);
   };
+
   return (
     <div className="form-container">
       <h1>
         Account <span className="text-primary">Register</span>
       </h1>
+      <Form
+        {...formItemLayout}
+        name="register"
+        onFinish={onFinish}
+        initialValues={{
+          residence: ["zhejiang", "hangzhou", "xihu"],
+          prefix: "86",
+        }}
+        scrollToFirstError
+      >
+        <Form.Item
+          label="Name"
+          name="name"
+          type="text"
+          rules={[
+            {
+              required: true,
+              message: "Please input your name!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          label="E-mail"
+          rules={[
+            {
+              type: "email",
+              message: "The input is not valid E-mail!",
+            },
+            {
+              required: true,
+              message: "Please input your E-mail!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={name}
-            onChange={handleChange}
-            placeholder="Name"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={handleChange}
-            placeholder="Email"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-            minLength="6"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="confPassword">Confirm Password</label>
-          <input
-            type="password"
-            name="confPassword"
-            id="confPassword"
-            value={confPassword}
-            onChange={handleChange}
-            placeholder="Confirm Password"
-            required
-            minLength="6"
-          />
-        </div>
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+            { min: 5, message: "password must be minimum 5 characters." },
+          ]}
+          hasFeedback
+        >
+          <Input.Password />
+        </Form.Item>
 
-        <input
-          type="submit"
-          value="Register"
-          className="btn btn-primary btn-block"
-        />
-      </form>
+        <Form.Item
+          name="confirm"
+          label="Confirm Password"
+          dependencies={["password"]}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Please confirm your password!",
+            },
+            ({ getFieldValue }) => ({
+              validator(rule, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+
+                return Promise.reject(
+                  "The two passwords that you entered do not match!"
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Button
+            // type="primary"
+            htmlType="submit"
+            //  value={current ? "Update Contact" : "Add Contact"}
+            style={{
+              borderRadius: "12px",
+              backgroundColor: "#74cf4e",
+              color: "white",
+              border: 0,
+              width: "75px",
+            }}
+          >
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

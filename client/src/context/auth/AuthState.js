@@ -12,17 +12,17 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
 } from "../actionTypes";
 import setAuthToken from "../../utils/setAuthToken";
 
-const AuthState = props => {
+const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem("token"),
     isAuthenticated: null,
     loading: true,
     user: null,
-    error: null
+    error: null,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -37,25 +37,31 @@ const AuthState = props => {
       const res = await axios.get("/api/auth");
       dispatch({
         type: USER_LOADED,
-        payload: res.data
+        payload: res.data,
       });
     } catch (error) {
       dispatch({
-        type: AUTH_ERROR
+        type: AUTH_ERROR,
       });
     }
   };
 
   // Register User
-  const registerUser = async formData => {
+  const registerUser = async (formData) => {
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
-
+    console.log(formData);
+    const body = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    };
+    console.log(body);
     try {
-      const res = await axios.post("/api/users", formData, config);
+      const res = await axios.post("/api/users", body, config);
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
 
       loadUser();
@@ -65,11 +71,11 @@ const AuthState = props => {
   };
 
   // Login User
-  const loginUser = async formData => {
+  const loginUser = async (formData) => {
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
 
     try {
@@ -85,13 +91,13 @@ const AuthState = props => {
   // Logout user
   const logoutUser = () =>
     dispatch({
-      type: LOGOUT
+      type: LOGOUT,
     });
 
   // Clear Errors
   const clearErrors = () =>
     dispatch({
-      type: CLEAR_ERRORS
+      type: CLEAR_ERRORS,
     });
 
   return (
@@ -106,7 +112,7 @@ const AuthState = props => {
         registerUser,
         loadUser,
         logoutUser,
-        clearErrors
+        clearErrors,
       }}
     >
       {props.children}
